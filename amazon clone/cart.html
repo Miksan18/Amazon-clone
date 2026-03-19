@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazon Cart</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#e3e6e6;
+}
+
+/* NAVBAR */
+.navbar{
+  background:#131921;
+  color:white;
+  padding:15px;
+  font-size:20px;
+}
+
+/* CONTAINER */
+.cart-container{
+  display:flex;
+  flex-wrap:wrap;
+  gap:20px;
+  padding:20px;
+}
+
+/* LEFT SIDE */
+.cart-items{
+  flex:2;
+  background:white;
+  padding:20px;
+  border-radius:8px;
+}
+
+/* ITEM */
+.cart-item{
+  display:flex;
+  align-items:center;
+  border-bottom:1px solid #ddd;
+  padding:15px 0;
+}
+
+.cart-item img{
+  width:120px;
+  height:120px;
+  object-fit:cover;
+  margin-right:20px;
+  border-radius:5px;
+}
+
+.details{
+  flex:1;
+}
+
+.details h3{
+  margin:0;
+  font-size:18px;
+}
+
+.price{
+  color:#B12704;
+  font-weight:bold;
+  margin:5px 0;
+}
+
+/* BUTTONS */
+.qty-btn{
+  padding:5px 10px;
+  margin:5px;
+  cursor:pointer;
+  border:1px solid #ccc;
+  background:white;
+}
+
+.qty-btn:hover{
+  background:#ddd;
+}
+
+.remove{
+  color:#007185;
+  cursor:pointer;
+  font-size:14px;
+}
+
+/* RIGHT SIDE */
+.summary{
+  flex:1;
+  background:white;
+  padding:20px;
+  border-radius:8px;
+  height:fit-content;
+}
+
+.summary h2{
+  margin-bottom:20px;
+}
+
+.checkout{
+  width:100%;
+  padding:12px;
+  background:#ffd814;
+  border:none;
+  cursor:pointer;
+  font-weight:bold;
+  border-radius:5px;
+}
+
+.checkout:hover{
+  background:#f7ca00;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .cart-container{
+    flex-direction:column;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">🛒 Amazon Cart</div>
+
+<div class="cart-container">
+
+  <!-- CART ITEMS -->
+  <div class="cart-items" id="cart-items">
+
+    <!-- ITEM 1 -->
+    <div class="cart-item" data-price="999">
+      <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c">
+
+      <div class="details">
+        <h3>Cookware Set</h3>
+        <p class="price">₹999</p>
+
+        <div>
+          <button class="qty-btn" onclick="changeQty(this,-1)">-</button>
+          <span class="qty">1</span>
+          <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+        </div>
+
+        <p class="remove" onclick="removeItem(this)">Remove</p>
+      </div>
+    </div>
+
+    <!-- ITEM 2 -->
+    <div class="cart-item" data-price="1499">
+      <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8">
+
+      <div class="details">
+        <h3>Keyboard</h3>
+        <p class="price">₹1499</p>
+
+        <div>
+          <button class="qty-btn" onclick="changeQty(this,-1)">-</button>
+          <span class="qty">1</span>
+          <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+        </div>
+
+        <p class="remove" onclick="removeItem(this)">Remove</p>
+      </div>
+    </div>
+
+    <!-- ITEM 3 -->
+    <div class="cart-item" data-price="799">
+      <img src="https://images.unsplash.com/photo-1580910051074-3eb694886505">
+
+      <div class="details">
+        <h3>Wireless Earbuds</h3>
+        <p class="price">₹799</p>
+
+        <div>
+          <button class="qty-btn" onclick="changeQty(this,-1)">-</button>
+          <span class="qty">1</span>
+          <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+        </div>
+
+        <p class="remove" onclick="removeItem(this)">Remove</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary">
+    <h2>Order Summary</h2>
+    <p>Subtotal: ₹<span id="total">0</span></p>
+    <button class="checkout">Proceed to Buy</button>
+  </div>
+
+</div>
+
+<script>
+function changeQty(btn, val){
+  let qtySpan = btn.parentElement.querySelector(".qty");
+  let qty = parseInt(qtySpan.innerText);
+
+  qty += val;
+  if(qty < 1) qty = 1;
+
+  qtySpan.innerText = qty;
+  updateTotal();
+}
+
+function removeItem(btn){
+  let item = btn.closest(".cart-item");
+  item.remove();
+  updateTotal();
+
+  if(document.querySelectorAll(".cart-item").length === 0){
+    document.getElementById("cart-items").innerHTML = "<h3>Your cart is empty</h3>";
+  }
+}
+
+function updateTotal(){
+  let items = document.querySelectorAll(".cart-item");
+  let total = 0;
+
+  items.forEach(item => {
+    let price = parseInt(item.getAttribute("data-price"));
+    let qty = parseInt(item.querySelector(".qty").innerText);
+    total += price * qty;
+  });
+
+  document.getElementById("total").innerText = total;
+}
+
+/* INITIAL LOAD */
+updateTotal();
+</script>
+
+</body>
+</html>
